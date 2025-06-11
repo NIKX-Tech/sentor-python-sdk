@@ -2,12 +2,6 @@
 
 A Python SDK for interacting with the Sentor ML API for sentiment analysis. This SDK provides a simple and intuitive interface for sentiment analysis operations.
 
-## Installation
-
-```bash
-pip install sentor-ml
-```
-
 ## Features
 
 - 🚀 Python 3.7+ support
@@ -16,6 +10,30 @@ pip install sentor-ml
 - 📦 Batch processing capabilities
 - 🛡️ Comprehensive error handling
 - 🔄 Real-time sentiment analysis
+
+## Installation
+
+```bash
+pip install sentor-ml
+```
+
+## Get API key
+
+### Try with guest API key
+Get a guest API key to try the API.
+
+```bash
+curl -X 'POST' \
+  'https://ml.sentor.app/api/auth/guest-access' \
+  -H 'accept: application/json' \
+  -d ''
+```
+
+### Work like a PRO
+
+1. Go to [Sentor ML API](https://ml.sentor.app)
+2. Subscribe to the Starter plan
+3. Get your API key
 
 ## Usage
 
@@ -81,7 +99,8 @@ print(result)
 
 ## API Reference
 
-Please refer to the [Sentor ML API Documentation](https://ml.sentor.app) for more details.
+Please refer to the [Sentor ML API Documentation](https://ml.sentor.app/docs/guide/) for more details.
+You can also try the API in the [Sentor ML API Swagger Playground](https://ml.sentor.app/docs).
 
 ## Contributing
 

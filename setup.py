@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="sentor-ml",
-    version="1.0.0",
+    version="1.0.1",
     author="NIKX Technologies",
     author_email="sentor@nikx.one",
     description="A Python SDK for interacting with the Sentor ML API for sentiment analysis",
