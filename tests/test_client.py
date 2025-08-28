@@ -20,7 +20,7 @@ def test_client_initialization():
     client = SentorClient(api_key="test-key")
     assert isinstance(client, SentorClient)
     assert client.api_key == "test-key"
-    assert client.base_url == "https://ml.sentor.app/api"
+    assert client.base_url == "https://sentor.app/api"
     assert client.timeout == 30
 
 
