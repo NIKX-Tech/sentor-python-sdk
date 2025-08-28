@@ -17,7 +17,7 @@ class SentorClient:
     def __init__(
         self,
         api_key: str,
-        base_url: str = "https://ml.sentor.app/api",
+        base_url: str = "https://sentor.app/api",
         timeout: int = 30,
     ):
         """
@@ -49,7 +49,7 @@ class SentorClient:
         if not documents:
             raise ValueError("Input is required")
 
-        url = f"{self.base_url}/ml/predict"
+        url = f"{self.base_url}/predicts"
         payload = {"docs": documents}
         response = requests.post(
             url, json=payload, headers=self.headers, timeout=self.timeout
@@ -73,7 +73,7 @@ class SentorClient:
         Raises:
             SentorAPIError: If health check fails
         """
-        url = f"{self.base_url}/health"
+        url = f"{self.base_url}/predicts/health"
         response = requests.get(
             url,
             headers=self.headers,
