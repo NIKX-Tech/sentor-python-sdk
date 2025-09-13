@@ -55,7 +55,7 @@ class SentorClient:
             url, json=payload, headers=self.headers, timeout=self.timeout
         )
 
-        if response.status_code == 200:
+        if response.status_code == 200 or response.status_code == 201:
             return response.json()
         elif response.status_code == 429:
             raise RateLimitError(response.json())
