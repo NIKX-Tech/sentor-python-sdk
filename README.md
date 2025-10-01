@@ -6,7 +6,7 @@ A Python SDK for interacting with the Sentor ML API for sentiment analysis. This
 
 - 🚀 Python 3.7+ support
 - ⚡ Simple and intuitive API
-- 🌍 Support for multiple languages
+- 🌍 Multi-language support (English and Dutch)
 - 📦 Batch processing capabilities
 - 🛡️ Comprehensive error handling
 - 🔄 Real-time sentiment analysis
@@ -33,7 +33,7 @@ from sentor import SentorClient
 # Initialize the client
 client = SentorClient('your-api-key')
 
-# Analyze sentiment
+# Predict sentiment
 input_data = [
     {
       "doc": "In the competitive landscape of consumer electronics, Apple and Samsung continue to lead the market with innovative products and strong brand loyalty. While Apple focuses on a tightly integrated ecosystem with devices like the iPhone, iPad, and Mac, Samsung excels in offering a wide range of options across various price points, especially in its Galaxy smartphone lineup. Both companies push the boundaries of technology, from cutting-edge chipsets to advanced camera systems, often setting industry trends that others follow.",
@@ -61,8 +61,31 @@ input_data = [
       ]
     }
   ]
-result = client.analyze(input_data)
+# Predict with default language (English)
+result = client.predict(input_data)
 print(result)
+
+# Predict with Dutch language
+result_nl = client.predict(input_data, language="nl")
+print(result_nl)
+```
+
+### Language Support
+
+The SDK supports multi-language sentiment analysis with the following options:
+
+- `"en"` (default): English language prediction
+- `"nl"`: Dutch language prediction
+
+```python
+# Default English prediction
+result_en = client.predict(documents)
+
+# Explicitly specify English
+result_en = client.predict(documents, language="en")
+
+# Dutch language prediction
+result_nl = client.predict(documents, language="nl")
 ```
 
 ### Sample Output

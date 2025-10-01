@@ -4,7 +4,7 @@ from typing import TypedDict, List
 
 
 class DocumentInput(TypedDict):
-    """Represents a document to be analyzed with its metadata."""
+    """Represents a document to be predicted with its metadata."""
 
     doc_id: str
     doc: str
@@ -31,17 +31,19 @@ class SentorClient:
             "Content-Type": "application/json",
         }
 
-    def analyze(self, documents: List[DocumentInput]):
-        """Analyze documents for sentiment and entity extraction.
+    def predict(self, documents: List[DocumentInput], language: str = "en"):
+        """Predict sentiment and entity extraction for documents.
 
         Args:
-            documents: List of documents to analyze
+            documents: List of documents to predict
+            language: Language code for prediction (default: "en").
+                Supported languages: "en", "nl"
 
         Returns:
-            dict: Analysis results
+            dict: Prediction results
 
         Raises:
-            ValueError: If input is empty
+            ValueError: If input is empty or invalid language is provided
             RateLimitError: If API rate limit is exceeded
             AuthenticationError: If API key is invalid
             SentorAPIError: For other API errors
@@ -49,10 +51,18 @@ class SentorClient:
         if not documents:
             raise ValueError("Input is required")
 
+        if language not in ["en", "nl"]:
+            raise ValueError("Language must be 'en' or 'nl'")
+
         url = f"{self.base_url}/predicts"
+        params = {"language": language}
         payload = {"docs": documents}
         response = requests.post(
-            url, json=payload, headers=self.headers, timeout=self.timeout
+            url,
+            json=payload,
+            headers=self.headers,
+            timeout=self.timeout,
+            params=params,
         )
 
         if response.status_code == 200 or response.status_code == 201:
