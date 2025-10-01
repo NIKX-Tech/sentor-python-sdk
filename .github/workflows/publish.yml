@@ -95,4 +95,4 @@ jobs:
                   git config --local user.name "GitHub Action"
                   git add setup.py
                   git commit -m "Bump version to ${{ steps.bump_version.outputs.version }}"
-                  git push
+                  git push origin main
