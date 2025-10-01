@@ -1,20 +1,20 @@
 name: Publish to PyPI
 
 on:
+    push:
+        branches:
+            - prod
     workflow_dispatch:
         inputs:
             version_type:
                 description: "Version bump type"
                 required: true
-                default: "patch"
+                default: "minor"
                 type: choice
                 options:
                     - patch
                     - minor
                     - major
-    push:
-        tags:
-            - "v*"
 
 jobs:
     publish:
