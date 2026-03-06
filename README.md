@@ -188,6 +188,59 @@ result_nl = client.predict(documents, language="nl")
 }
 ```
 
+## Document Clustering
+
+```python
+# Prepare documents for clustering (minimum 5 required)
+documents = [
+    {
+        "doc_id": "doc1",
+        "text": "Apple announced new iPhone features with improved camera.",
+        "entities": ["Apple", "iPhone", "camera"]
+    },
+    {
+        "doc_id": "doc2",
+        "text": "Samsung launched Galaxy with advanced AI capabilities.",
+        "entities": ["Samsung", "Galaxy", "AI"]
+    },
+    {
+        "doc_id": "doc3",
+        "text": "Apple plans to integrate AI into iOS ecosystem.",
+        "entities": ["Apple", "AI", "iOS"]
+    },
+    {
+        "doc_id": "doc4",
+        "text": "SpaceX successfully launched Starlink satellites.",
+        "entities": ["SpaceX", "Starlink", "satellites"]
+    },
+    {
+        "doc_id": "doc5",
+        "text": "Bitcoin price surged after ETF approval.",
+        "entities": ["Bitcoin", "ETF"]
+    }
+]
+
+# Cluster documents
+clustering_result = client.cluster(documents, language='en')
+print(f"Total clusters: {clustering_result['total_clusters']}")
+```
+
+## Generating Topic Names
+
+```python
+# After clustering, generate topic names for each cluster
+for cluster in clustering_result['clusters']:
+    topic_result = client.generate_topic_name(
+        cluster_id=cluster['cluster_id'],
+        documents=cluster['documents'],
+        entities=cluster['entities'],
+        top_words=cluster['top_words'],
+        language='en'
+    )
+    
+    print(f"Cluster {cluster['cluster_id']}: {topic_result['topic_name']}")
+```
+
 ## API Reference
 
 Please refer to the [Sentor ML API Documentation](https://sentor.app/docs) for more details.
