@@ -5,8 +5,8 @@
 
 [![PyPI](https://img.shields.io/pypi/v/sentor-python-sdk?style=flat-square&logo=python&logoColor=white&label=pypi)](https://pypi.org/project/sentor-python-sdk/)
 [![Python](https://img.shields.io/pypi/pyversions/sentor-python-sdk?style=flat-square)](https://pypi.org/project/sentor-python-sdk/)
-[![License](https://img.shields.io/github/license/NIKX-Tech/sentor-ml-python-sdk?style=flat-square&color=blue)](https://opensource.org/licenses/MIT)
-[![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/sentor-ml-python-sdk?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/sentor-ml-python-sdk/stargazers)
+[![License](https://img.shields.io/github/license/NIKX-Tech/sentor-python-sdk?style=flat-square&color=blue)](https://opensource.org/licenses/MIT)
+[![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/sentor-python-sdk?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/sentor-python-sdk/stargazers)
 <br>
 [![Website](https://img.shields.io/badge/website-sentor.app-5546FA?style=flat-square&logo=google-chrome&logoColor=white)](https://sentor.app)
 [![Dashboard](https://img.shields.io/badge/get%20api%20key-dashboard.sentor.app-5546FA?style=flat-square)](https://dashboard.sentor.app/settings?tab=api-access)

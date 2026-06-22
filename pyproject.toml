@@ -28,7 +28,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://sentor.app"
 Documentation = "https://sentor.app/docs"
-Repository = "https://github.com/NIKX-Tech/sentor-ml-python-sdk"
+Repository = "https://github.com/NIKX-Tech/sentor-python-sdk"
 "Get API Key" = "https://dashboard.sentor.app/settings?tab=api-access"
 
 [tool.hatch.build.targets.wheel]
