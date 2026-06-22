@@ -1,255 +1,213 @@
+<!-- markdownlint-disable MD033 -->
 # Sentor Python SDK
 
-A Python SDK for interacting with the Sentor ML API for sentiment analysis. This SDK provides a simple and intuitive interface for sentiment analysis operations.
+**Official Python SDK for the Sentor API — entity-based sentiment analysis, document clustering, and topic naming.**
 
-## Features
+[![PyPI](https://img.shields.io/pypi/v/sentor-python-sdk?style=flat-square&logo=python&logoColor=white&label=pypi)](https://pypi.org/project/sentor-python-sdk/)
+[![Python](https://img.shields.io/pypi/pyversions/sentor-python-sdk?style=flat-square)](https://pypi.org/project/sentor-python-sdk/)
+[![License](https://img.shields.io/github/license/NIKX-Tech/sentor-python-sdk?style=flat-square&color=blue)](https://opensource.org/licenses/MIT)
+[![GitHub Stars](https://img.shields.io/github/stars/NIKX-Tech/sentor-python-sdk?style=flat-square&color=yellow)](https://github.com/NIKX-Tech/sentor-python-sdk/stargazers)
+<br>
+[![Website](https://img.shields.io/badge/website-sentor.app-5546FA?style=flat-square&logo=google-chrome&logoColor=white)](https://sentor.app)
+[![Dashboard](https://img.shields.io/badge/get%20api%20key-dashboard.sentor.app-5546FA?style=flat-square)](https://dashboard.sentor.app/settings?tab=api-access)
+[![Docs](https://img.shields.io/badge/docs-sentor.app%2Fdocs-5546FA?style=flat-square)](https://sentor.app/docs)
 
-- 🚀 Python 3.7+ support
-- ⚡ Simple and intuitive API
-- 🌍 Multi-language support (English and Dutch)
-- 📦 Batch processing capabilities
-- 🛡️ Comprehensive error handling
-- 🔄 Real-time sentiment analysis
+Stop guessing why ratings drop. Sentor pinpoints exactly how customers feel about specific entities — brands, products, features, competitors — using fine-tuned BERT models trained for aspect-based sentiment analysis.
 
-## Installation
+---
+
+## Table of Contents
+
+- [Installation](#-installation)
+- [Quick Start](#-quick-start)
+- [API Reference](#-api-reference)
+  - [predict()](#predictdocuments-language)
+  - [cluster()](#clusterdocuments-language)
+  - [generate_topic_name()](#generate_topic_namecluster_id-documents)
+  - [check_health()](#check_health)
+- [Error Handling](#-error-handling)
+- [Rate Limits](#-rate-limits)
+- [Migration from sentor-ml](#-migration-from-sentor-ml)
+
+---
+
+## 📦 Installation
 
 ```bash
-pip install sentor-ml
+pip install sentor-python-sdk
 ```
 
-### Work like a PRO
+Get a free API key at [dashboard.sentor.app](https://dashboard.sentor.app/settings?tab=api-access).
 
-1. Go to [Sentor ML API](https://sentor.app/api)
-2. Subscribe to the Starter plan
-3. Get your API key
+---
 
-## Usage
-
-### Basic Usage
+## 🚀 Quick Start
 
 ```python
 from sentor import SentorClient
 
-# Initialize the client
-client = SentorClient('your-api-key')
+client = SentorClient("your_api_key")
 
-# Predict sentiment
-input_data = [
+results = client.predict([
     {
-      "doc": "In the competitive landscape of consumer electronics, Apple and Samsung continue to lead the market with innovative products and strong brand loyalty. While Apple focuses on a tightly integrated ecosystem with devices like the iPhone, iPad, and Mac, Samsung excels in offering a wide range of options across various price points, especially in its Galaxy smartphone lineup. Both companies push the boundaries of technology, from cutting-edge chipsets to advanced camera systems, often setting industry trends that others follow.",
-      "doc_id": "0",
-      "entities": [
-        "Apple",
-        "Samsung",
-        "camera"
-      ]
-    },
-    {
-      "doc": "Apple's new iPhone is amazing!",
-      "doc_id": "1",
-      "entities": [
-        "Apple",
-        "iPhone"
-      ]
-    },
-    {
-      "doc": "Samsung's new phone is amazing!",
-      "doc_id": "2",
-      "entities": [
-        "Samsung",
-        "phone"
-      ]
+        "doc_id": "review-1",
+        "doc": "Apple's new iPhone is amazing but the price is ridiculous.",
+        "entities": ["Apple", "iPhone", "price"]
     }
-  ]
-# Predict with default language (English)
-result = client.predict(input_data)
-print(result)
+])
 
-# Predict with Dutch language
-result_nl = client.predict(input_data, language="nl")
-print(result_nl)
+for item in results["results"]:
+    print(item["doc_id"], item["predicted_label"])
+    for es in item.get("entity_sentiments", []):
+        print(f"  {es['entity']}: {es['sentiment']} ({es['score']:.2f})")
 ```
 
-### Language Support
+---
 
-The SDK supports multi-language sentiment analysis with the following options:
+## 📖 API Reference
 
-- `"en"` (default): English language prediction
-- `"nl"`: Dutch language prediction
+### `predict(documents, language="en")`
+
+Score sentiment toward named entities in one or more documents.
 
 ```python
-# Default English prediction
-result_en = client.predict(documents)
-
-# Explicitly specify English
-result_en = client.predict(documents, language="en")
-
-# Dutch language prediction
-result_nl = client.predict(documents, language="nl")
+results = client.predict(
+    documents=[
+        {
+            "doc_id": "r1",
+            "doc": "Samsung's camera is great but battery life is poor.",
+            "entities": ["Samsung", "camera", "battery life"]
+        }
+    ],
+    language="en"  # "en" or "nl"
+)
 ```
 
-### Sample Output
+**Response shape:**
 
-```json
+```python
 {
-  "results": [
-    {
-      "doc_id": "0",
-      "predicted_class": 2,
-      "predicted_label": "positive",
-      "probabilities": {
-        "negative": 0.00007679959526285529,
-        "neutral": 0.0002924697764683515,
-        "positive": 0.9996306896209717
-      },
-      "details": [
+    "results": [
         {
-          "sentence_index": 0,
-          "sentence_text": "In the competitive landscape of consumer electronics, Apple and Samsung continue to lead the market with innovative products and strong brand loyalty.",
-          "predicted_class": 2,
-          "predicted_label": "positive",
-          "probabilities": {
-            "negative": 0.00009389198385179043,
-            "neutral": 0.00032428017584607005,
-            "positive": 0.9995818734169006
-          }
-        },
-        {
-          "sentence_index": 1,
-          "sentence_text": "While Apple focuses on a tightly integrated ecosystem with devices like the iPhone, iPad, and Mac, Samsung excels in offering a wide range of options across various price points, especially in its Galaxy smartphone lineup.",
-          "predicted_class": 2,
-          "predicted_label": "positive",
-          "probabilities": {
-            "negative": 0.00005746580063714646,
-            "neutral": 0.00012963586777914315,
-            "positive": 0.99981290102005
-          }
-        },
-        {
-          "sentence_index": 2,
-          "sentence_text": "Both companies push the boundaries of technology, from cutting-edge chipsets to advanced camera systems, often setting industry trends that others follow.",
-          "predicted_class": 2,
-          "predicted_label": "positive",
-          "probabilities": {
-            "negative": 0.00006366783054545522,
-            "neutral": 0.00044553453335538507,
-            "positive": 0.9994907379150391
-          }
+            "doc_id": "r1",
+            "predicted_class": 0,        # 0=negative, 1=neutral, 2=positive
+            "predicted_label": "negative",
+            "probabilities": {"negative": 0.72, "neutral": 0.18, "positive": 0.10},
+            "details": [...],            # per-sentence breakdown
+            "entity_sentiments": [
+                {"entity": "Samsung", "sentiment": "neutral", "score": 0.61},
+                {"entity": "camera", "sentiment": "positive", "score": 0.88},
+                {"entity": "battery life", "sentiment": "negative", "score": 0.91}
+            ]
         }
-      ]
-    },
-    {
-      "doc_id": "1",
-      "predicted_class": 2,
-      "predicted_label": "positive",
-      "probabilities": {
-        "negative": 0.00010637375817168504,
-        "neutral": 0.0002509312762413174,
-        "positive": 0.9996427297592163
-      },
-      "details": [
-        {
-          "sentence_index": 0,
-          "sentence_text": "Apple's new iPhone is amazing!",
-          "predicted_class": 2,
-          "predicted_label": "positive",
-          "probabilities": {
-            "negative": 0.00010637375817168504,
-            "neutral": 0.0002509312762413174,
-            "positive": 0.9996427297592163
-          }
-        }
-      ]
-    },
-    {
-      "doc_id": "2",
-      "predicted_class": 2,
-      "predicted_label": "positive",
-      "probabilities": {
-        "negative": 0.00010637375817168504,
-        "neutral": 0.0002509312762413174,
-        "positive": 0.9996427297592163
-      },
-      "details": [
-        {
-          "sentence_index": 0,
-          "sentence_text": "Samsung's new phone is amazing!",
-          "predicted_class": 2,
-          "predicted_label": "positive",
-          "probabilities": {
-            "negative": 0.00010637375817168504,
-            "neutral": 0.0002509312762413174,
-            "positive": 0.9996427297592163
-          }
-        }
-      ]
-    }
-  ]
+    ]
 }
 ```
 
-## Document Clustering
+**Supported languages:** `en` (English), `nl` (Dutch)
+
+---
+
+### `cluster(documents, language="en")`
+
+Group 5+ documents into thematic clusters using BERTopic + HDBSCAN.
 
 ```python
-# Prepare documents for clustering (minimum 5 required)
-documents = [
-    {
-        "doc_id": "doc1",
-        "text": "Apple announced new iPhone features with improved camera.",
-        "entities": ["Apple", "iPhone", "camera"]
-    },
-    {
-        "doc_id": "doc2",
-        "text": "Samsung launched Galaxy with advanced AI capabilities.",
-        "entities": ["Samsung", "Galaxy", "AI"]
-    },
-    {
-        "doc_id": "doc3",
-        "text": "Apple plans to integrate AI into iOS ecosystem.",
-        "entities": ["Apple", "AI", "iOS"]
-    },
-    {
-        "doc_id": "doc4",
-        "text": "SpaceX successfully launched Starlink satellites.",
-        "entities": ["SpaceX", "Starlink", "satellites"]
-    },
-    {
-        "doc_id": "doc5",
-        "text": "Bitcoin price surged after ETF approval.",
-        "entities": ["Bitcoin", "ETF"]
-    }
-]
+results = client.cluster(
+    documents=[
+        {"doc_id": "r1", "text": "Shipping was incredibly fast.", "entities": ["shipping"]},
+        # ... at least 5 documents
+    ],
+    language="en"
+)
 
-# Cluster documents
-clustering_result = client.cluster(documents, language='en')
-print(f"Total clusters: {clustering_result['total_clusters']}")
+for cluster in results["clusters"]:
+    print(cluster["cluster_id"], cluster["document_count"], cluster["top_words"])
+# Cluster -1 = outliers that did not fit any topic
 ```
 
-## Generating Topic Names
+---
+
+### `generate_topic_name(cluster_id, documents, ...)`
+
+Generate a 3–5 word label for a cluster using an LLM.
 
 ```python
-# After clustering, generate topic names for each cluster
-for cluster in clustering_result['clusters']:
-    topic_result = client.generate_topic_name(
-        cluster_id=cluster['cluster_id'],
-        documents=cluster['documents'],
-        entities=cluster['entities'],
-        top_words=cluster['top_words'],
-        language='en'
-    )
-    
-    print(f"Cluster {cluster['cluster_id']}: {topic_result['topic_name']}")
+result = client.generate_topic_name(
+    cluster_id=0,
+    documents=cluster["documents"],
+    top_words=cluster["top_words"],
+    entities=["BrandName"],
+    language="en"
+)
+print(result["topic_name"])  # e.g. "Shipping Delay Complaints"
 ```
 
-## API Reference
+---
 
-Please refer to the [Sentor ML API Documentation](https://sentor.app/docs) for more details.
-You can also try the API in the [Sentor ML API Swagger Playground](https://sentor.app/docs).
+### `check_health()`
 
-## Contributing
+```python
+health = client.check_health()
+# {"status": "healthy", "version": "...", "llm_status": "available"}
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
 
-## License
+## ⚠️ Error Handling
 
-MIT License - see the [LICENSE](LICENSE) file for details.
+```python
+from sentor import SentorClient
+from sentor.exceptions import SentorAPIError, RateLimitError, AuthenticationError
+
+client = SentorClient("your_api_key")
+
+try:
+    results = client.predict([...])
+except AuthenticationError:
+    print("Invalid API key")
+except RateLimitError as e:
+    print(f"Rate limit hit. Retry after {e.retry_after}s")
+except SentorAPIError as e:
+    print(f"API error: {e.message} (code: {e.code})")
+```
+
+---
+
+## 📊 Rate Limits
+
+| Plan | Per Minute | Per Day | Per Month |
+|------|-----------|---------|-----------|
+| **Free** | 5 | 100 | 1,000 |
+| **Starter** | 20 | 600 | 5,000 |
+| **Growth** | 60 | 3,000 | 25,000 |
+| **Business** | 200 | 10,000 | 100,000 |
+| **Enterprise** | 500 | 30,000 | 500,000 |
+
+[View full pricing →](https://sentor.app/pricing)
+
+---
+
+## 🔄 Migration from `sentor-ml`
+
+This package replaces `sentor-ml`. The import name (`sentor`) and all method signatures are unchanged — only the install command changes:
+
+```bash
+pip uninstall sentor-ml
+pip install sentor-python-sdk
+```
+
+---
+
+## 🔗 Links
+
+- [Sentor Dashboard](https://dashboard.sentor.app) — manage API keys and usage
+- [API Documentation](https://sentor.app/docs)
+- [PyPI Package](https://pypi.org/project/sentor-python-sdk/)
+- [Support](mailto:sentor@nikx.one)
+
+---
+
+<p align="center">
+  Built by <a href="https://nikx.one">NIKX Technologies B.V.</a>
+</p>
