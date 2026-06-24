@@ -177,12 +177,12 @@ except SentorAPIError as e:
 ## 📊 Rate Limits
 
 | Plan | Per Minute | Per Day | Per Month |
-|------|-----------|---------|-----------|
-| **Free** | 5 | 100 | 1,000 |
-| **Starter** | 20 | 600 | 5,000 |
-| **Growth** | 60 | 3,000 | 25,000 |
-| **Business** | 200 | 10,000 | 100,000 |
-| **Enterprise** | 500 | 30,000 | 500,000 |
+|------|:---------:|:-------:|:---------:|
+| **Free** | 3 | 30 | 300 |
+| **Starter** | 60 | 500 | 3,000 |
+| **Growth** | 200 | 2,000 | 15,000 |
+| **Business** | 500 | 5,000 | 60,000 |
+| **Enterprise** | Unlimited | Unlimited | Unlimited |
 
 [View full pricing →](https://sentor.app/pricing)
 
