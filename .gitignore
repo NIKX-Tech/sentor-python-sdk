@@ -18,4 +18,3 @@ venv/
 .pytest_cache/
 
 .pypirc
-.claude-flow
